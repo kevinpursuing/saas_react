@@ -4,7 +4,7 @@ import {
   Route,
   Switch
 } from 'react-router-dom'
-import { createStore, applyMiddleware, compose} from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk' //action异步中间件
 import { Provider } from 'react-redux'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
@@ -19,6 +19,7 @@ import Test from './test/test'
 import './index.css'
 
 const theme = createMuiTheme({
+  primary: '#1a9f9f',
   palette: {
     primary: { main: '#1a9f9f' },
   },

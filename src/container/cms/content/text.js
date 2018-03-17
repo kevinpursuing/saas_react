@@ -46,7 +46,7 @@ class CmsText extends Component {
 
         }
     }
-    
+
     componentDidMount = () => {
         console.log(this.props)
     }
@@ -72,11 +72,11 @@ class CmsText extends Component {
                     <Button variant="raised" className={classes.searchButton}>
                         搜索
                     </Button>
-                    <Link to="/cms/content/text/edit">
-                    <Button variant="raised" color="primary" className={classes.createBtn}>
-                        新建图文
+                    <Link to="/cms/content/text/create">
+                        <Button variant="raised" color="primary" className={classes.createBtn}>
+                            新建图文
                     </Button></Link>
-        
+
                     <Typography className={classes.tableTitle} variant="subheading">图文列表</Typography>
                     <Paper className={classes.root}>
                         <Table className={classes.table}>

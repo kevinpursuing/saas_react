@@ -144,7 +144,7 @@ class SidebarDate extends React.Component {
                     {/* 侧边栏 */}
                     {Object.keys(options).map((o, i) => (
                         <div key={o}>
-                            <ListItem button onClick={() => { console.log(SideBar.firstPartFlag); let firstArray = this.state.firstPart; firstArray[o] = !firstArray[o]; this.setState({ firstPart: firstArray, firstParams: o }) }}>
+                            <ListItem button onClick={() => { let firstArray = this.state.firstPartFlag; firstArray[o] = !firstArray[o]; this.setState({ firstPartFlag: firstArray, firstParams: o }) }}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>
