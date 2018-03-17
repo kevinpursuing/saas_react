@@ -1,0 +1,79 @@
+body,
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: #fafafa
+}
+
+a {
+    text-decoration-line: none;
+}
+
+.blue {
+    color: #1a9f9f;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.loginBox {
+    position: absolute;
+    width: 500px;
+    height: 300px;
+    padding-top: 18px;
+    left: 50%;
+    top: 36%;
+    margin-top: -100px;
+    margin-left: -250px;
+}
+
+.logoBox {
+    position: absolute;
+    width: 78px;
+    height: 70px;
+    left: 6%;
+    top: 2%;
+}
+
+.logoBox img {
+    width: 100%;
+    height: 100%;
+}
+
+.headerWords {
+    width: 100%;
+    text-align: center
+}
+
+.loginInput {
+    width: 400px;
+    margin: 10px auto 20px auto;
+}
+
+.loginInput>div {
+    width: 100%;
+}
+
+.loginInput>button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+input:-webkit-autofill {
+    background-color: white !important;
+}
+
+.footerWords {
+    margin-top: 26px;
+    color: #999;
+    font-weight: 400;
+    font-size: 14px;
+}

@@ -1,0 +1,25 @@
+.red {
+    color: #f44336 !important
+}
+
+.registerBox {
+    position: absolute;
+    width: 500px;
+    height: 400px;
+    padding-top: 18px;
+    left: 50%;
+    top: 36%;
+    margin-top: -100px;
+    margin-left: -250px;
+}
+
+.phoneInput {
+    float: left;
+    width: 60%;
+}
+
+.phoneButton {
+    float: left;
+    width: 30%;
+    margin: 27px 0 10px 31px !important;
+}
