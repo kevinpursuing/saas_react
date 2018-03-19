@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   BrowserRouter,
   Route,
-  Switch
+  Switch,
 } from 'react-router-dom'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk' //action异步中间件
@@ -15,6 +15,7 @@ import Login from './container/login/login'
 import Register from './container/register/register'
 import cmsIndex from './container/cms/cms'
 import Test from './test/test'
+import Client from './container/client/client'
 
 import './index.css'
 
@@ -33,23 +34,20 @@ const store = createStore(reducer, compose(
 class App extends Component {
   render() {
     return (
-
-      <div className="App">
+      <Provider store={store}>
         <MuiThemeProvider theme={theme}>
-          <Provider store={store}>
-            <BrowserRouter>
-              <div>
-                <Switch>
-                  <Route exact path='/' component={Login}></Route>
-                  <Route path='/register' component={Register}></Route>
-                  <Route path='/cms' component={cmsIndex}></Route>
-                  <Route path='/test' component={Test}></Route>
-                </Switch>
-              </div>
-            </BrowserRouter>
-          </Provider>
+          <BrowserRouter>
+            <Switch>
+              <Route exact path='/' component={Login}></Route>
+              <Route exact path='/login' component={Login}></Route>
+              <Route path='/register' component={Register}></Route>
+              <Route path='/cms' component={cmsIndex}></Route>
+              <Route path='/test' component={Test}></Route>
+              <Route path='/app' component={Client}></Route>
+            </Switch>
+          </BrowserRouter>
         </MuiThemeProvider>
-      </div>
+      </Provider>
     );
   }
 }

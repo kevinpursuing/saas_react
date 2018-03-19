@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 import { withStyles } from 'material-ui/styles';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
@@ -8,7 +9,10 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Icon from 'material-ui/Icon';
+import DeleteIcon from 'material-ui-icons/Delete';
 
+import { getResList } from '../../../redux/res.redux'
 const styles = theme => ({
     root: {
         width: '100%',
@@ -25,46 +29,40 @@ const styles = theme => ({
         float: 'right',
         marginTop: 30,
     },
+    operateButton: {
+        margin: 5
+    },
     tableTitle: {
         marginTop: 10,
     }
 });
 
-let id = 0;
+@connect(
+    state => state,
+    { getResList }
+)
 class CmsText extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: 0,
-            data: [
-                this.createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-                this.createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-                this.createData('Eclair', 262, 16.0, 24, 6.0),
-                this.createData('Cupcake', 305, 3.7, 67, 4.3),
-                this.createData('Gingerbread', 356, 16.0, 49, 3.9),
-            ]
-
+            data: []
         }
     }
 
     componentDidMount = () => {
         console.log(this.props)
+        this.props.getResList(this.props.SideBar.type)
     }
-    createData = (name, calories, fat, carbs, protein) => {
-        id++
-        return { id, name, calories, fat, carbs, protein };
-    }
-
     render() {
         {
             const { classes } = this.props;
-
+            const resType = this.props.SideBar.resWords
             return (
                 <div>
-                    <Typography variant="title">我的图文</Typography>
+                    <Typography variant="title">我的{resType}</Typography>
                     <TextField
                         id="search"
-                        label="搜索图文"
+                        label={"搜索" + resType}
                         type="search"
                         className={classes.textField}
                         margin="normal"
@@ -72,33 +70,46 @@ class CmsText extends Component {
                     <Button variant="raised" className={classes.searchButton}>
                         搜索
                     </Button>
-                    <Link to="/cms/content/text/create">
+                    <Link to={"/cms/content/" + this.props.SideBar.secondPart + "/create"}>
                         <Button variant="raised" color="primary" className={classes.createBtn}>
-                            新建图文
-                    </Button></Link>
+                            新建{resType}
+                        </Button></Link>
 
-                    <Typography className={classes.tableTitle} variant="subheading">图文列表</Typography>
+                    <Typography className={classes.tableTitle} variant="subheading">{resType}列表</Typography>
                     <Paper className={classes.root}>
                         <Table className={classes.table}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>名称</TableCell>
                                     <TableCell numeric>付费类型</TableCell>
-                                    <TableCell numeric>所属类别</TableCell>
+                                    <TableCell numeric>价格</TableCell>
                                     <TableCell numeric>上架时间</TableCell>
                                     <TableCell numeric>状态</TableCell>
                                     <TableCell numeric>操作</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {this.state.data.map(n => {
+                                {this.props.res.resList.map(n => {
                                     return (
                                         <TableRow key={n.id}>
                                             <TableCell>{n.name}</TableCell>
-                                            <TableCell numeric>{n.calories}</TableCell>
-                                            <TableCell numeric>{n.fat}</TableCell>
-                                            <TableCell numeric>{n.carbs}</TableCell>
-                                            <TableCell numeric>{n.protein}</TableCell>
+                                            <TableCell numeric>{n.saleType ? "单卖" : "免费"}</TableCell>
+                                            <TableCell numeric>{n.saleType ? n.price : 0}</TableCell>
+                                            <TableCell numeric>{n.saleTime.split('.')[0]}</TableCell>
+                                            <TableCell numeric>已上架</TableCell>
+                                            <TableCell numeric>
+                                                <Link to={"/cms/content/" + this.props.SideBar.secondPart + "/" + n.id}>
+                                                    <Button variant="fab" mini color="primary" aria-label="edit" className={classes.operateButton}>
+                                                        <Icon>edit_icon</Icon>
+                                                    </Button>
+                                                </Link>
+
+                                                <Button variant="fab" mini aria-label="delete" className={classes.operateButton}>
+                                                    <DeleteIcon />
+                                                </Button>
+                                            </TableCell>
+
+
                                         </TableRow>
                                     );
                                 })}

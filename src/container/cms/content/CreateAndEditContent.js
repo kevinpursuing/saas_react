@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { withStyles } from 'material-ui/styles';
@@ -11,7 +12,10 @@ import Button from 'material-ui/Button';
 import { MenuItem } from 'material-ui/Menu';
 import { FormControl, FormHelperText } from 'material-ui/Form';
 import Select from 'material-ui/Select';
-import Input, { InputLabel } from 'material-ui/Input';
+import { InputLabel } from 'material-ui/Input';
+import Snackbar from 'material-ui/Snackbar';
+
+import { getResInfo, handleChange, ossUpload, ceRes } from '../../../redux/res.redux'
 
 const styles = theme => ({
     contentPaper: {
@@ -51,7 +55,7 @@ const styles = theme => ({
     },
     partTitle: {
         float: 'left',
-        paddingTop: 39,
+        paddingTop: 24,
         marginRight: 50
     },
     partTitlePrice: {
@@ -81,6 +85,10 @@ const styles = theme => ({
         height: 150,
         background: 'rgba(0, 0, 0, 0.24)'
     },
+    coverImg: {
+        width: 200,
+        height: 150,
+    },
     contentField: {
         float: 'left',
         width: '80%'
@@ -103,44 +111,92 @@ const styles = theme => ({
         marginLeft: 10
     },
     timeField: {
-        marginTop: 31
+        marginTop: 17
     },
     resUploadBtn: {
-        marginTop: 30
-    }
+        marginTop: 15
+    },
 
 })
 
+@connect(
+    state => state,
+    { ossUpload, getResInfo, handleChange, ceRes }
+)
 class CreateAndEditContent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            type: 0,   //资源类型
-            name: '',  //资源名称
-            inTro: '',  //资源简介
-            cover: '',  //资源封面
-            textContent: '',  //图文内容
-            saleType: 0,  //售卖类型
-            audioSrc: '',  //音频资源地址
-            videoSrc: '',  //视频资源地址
-            price: 0,  //资源价格
-            saleTime: '',   //上架时间
+            open: false,
+            vertical: 'top',
+            horizontal: 'center',
+            msg: '',   //错误提示文字
+            isEdit: false,  //是否是编辑页
         };
     }
 
-    handleChange = (key, val) => {
-        console.log(this.state)
-        this.setState({
-            [key]: val.target.value
-        })
+    componentDidMount = () => {
+        if (this.props.match.params.type !== 'create') {
+            this.setState({ isEdit: true })
+            this.props.getResInfo(this.props.match.params.type, this.props.SideBar.type)
+        }
     }
 
-    render() {
-        const { classes } = this.props;
+
+    getResType = (secondPart) => {
+        switch (secondPart) {
+            case 'text':
+                return [1, '图文']
+            case 'audio':
+                return [2, '音频']
+            case 'video':
+                return [3, '视频']
+            default:
+                return null
+        }
+    }
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+
+    createRes = () => {
+        let resType = this.getResType(this.props.SideBar.resWords)
+        let params = this.props.res
+        if (params.name === '') {
+            this.setState({ open: true, msg: `请输入${resType}名称` });
+            return
+        }
+        if (params.intro === '') {
+            this.setState({ open: true, msg: `请输入${resType}名称` });
+            return
+        }
+        if (params.cover === '') {
+            this.setState({ open: true, msg: `请输入${resType}封面` });
+            return
+        }
+        this.props.ceRes(this.props.res, this.props.SideBar.type, this.props.history, this.props.SideBar.secondPart)
+    }
+
+    render = () => {
+        const { classes } = this.props
+        // const { resType, name, cover, intro, textContent, audioSrc, videoSrc, saleType, price, saleTime } = this.state
+        const { vertical, horizontal, open, msg } = this.state
+
+        let resType = this.props.SideBar.resWords
+
         return (
             <div>
+                <Snackbar
+                    anchorOrigin={{ vertical, horizontal }}
+                    open={open}
+                    onClose={this.handleClose}
+                    SnackbarContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{msg}</span>}
+                />
                 <Paper className={classes.contentPaper}>
-                    <Typography className={classes.topPart}>内容管理  /   新增图文</Typography>
+                    <Typography className={classes.topPart}>内容管理  /   {this.state.isEdit ? '编辑' : '新增'}{resType}</Typography>
                     <Divider />
                     <div className={classes.content}>
                         <div className={classes.contentTitle}>
@@ -149,26 +205,28 @@ class CreateAndEditContent extends Component {
                         </div>
                         <div className={classes.mainContent}>
                             <div className={classes.contentPart}>
-                                <Typography className={classes.partTitle}>图文名称</Typography>
+                                <Typography className={classes.partTitle}>{resType}名称</Typography>
                                 <TextField
                                     id="name"
-                                    label="请输入图文名称"
                                     className={classes.contentInput}
-                                    onChange={v => this.handleChange('name', v)}
+                                    value={this.props.res.name}
+                                    onChange={v => this.props.handleChange('name', v)}
                                     margin="normal"
                                 />
                             </div>
                             <div className={classes.contentCover}>
-                                <Typography className={classes.partTitle}>图文封面</Typography>
+                                <Typography className={classes.partTitle}>{resType}封面</Typography>
                                 <Typography color='textSecondary'>750*422像素或16:9，支持PNG、JPG、GIF格式，小于5M</Typography>
-                                <div className={classes.coverPart}></div>
+                                <Paper className={classes.coverPart}>
+                                    {this.props.res.cover === '' ? null : <img className='coverImg' width='200' height="150" src={this.props.res.cover} alt='pic' />}
+                                </Paper>
                                 <input
                                     accept="image/*"
                                     className={classes.input}
                                     id="raised-button-file"
                                     multiple
                                     type="file"
-                                    onChange={v => this.handleChange('cover', v)}
+                                    onChange={v => this.props.ossUpload(v.target.files[0], 1)}
                                 />
                                 <label htmlFor="raised-button-file">
                                     <Button variant="raised" component="span" className={classes.button}>
@@ -177,41 +235,41 @@ class CreateAndEditContent extends Component {
                                 </label>
                             </div>
                             <div className={classes.contentIntro}>
-                                <Typography className={classes.partTitle}>图文简介</Typography>
+                                <Typography className={classes.partTitle}>{resType}简介</Typography>
                                 <TextField
                                     id="name"
-                                    label="请输入图文简介"
                                     className={classes.contentInput}
-                                    value=''
-                                    onChange={v => this.handleChange('inTro', v)}
+                                    value={this.props.res.intro}
+                                    onChange={v => this.props.handleChange('intro', v)}
                                     margin="normal"
                                 />
                             </div>
-                            <div className={classes.contentPart}>
-                                <Typography className={classes.partTitle}>资源上传</Typography>
+                            {this.props.SideBar.type === 1 ? null : <div className={classes.contentPart}>
+                                <Typography className={classes.partTitle}>{resType}上传</Typography>
                                 <input
-                                    accept="image/*"
+                                    accept={this.props.SideBar.type === 2 ? "audio/*" : "video/*"}
                                     className={classes.input}
-                                    id="raised-button-file"
+                                    id="reource"
                                     multiple
                                     type="file"
-                                    onChange={v => this.handleChange('cover', v)}
+                                    onChange={v => this.props.ossUpload(v.target.files[0], this.props.SideBar.type)}
                                 />
-                                <label htmlFor="raised-button-file">
+                                <label htmlFor="reource">
                                     <Button variant="raised" component="span" className={classes.resUploadBtn}>
-                                        上传资源
+                                        上传{resType}资源
                                </Button>
                                 </label>
-                            </div>
+                            </div>}
+
                             <div className={classes.multyContent}>
-                                <Typography className={classes.partTitle}>图文内容</Typography>
+                                <Typography className={classes.partTitle}>{resType}内容</Typography>
                                 <div >
                                     <TextField
                                         id="multiline-flexible"
-                                        label="多行书写"
                                         multiline
                                         rowsMax="100"
-                                        onChange={v => this.handleChange('textContent', v)}
+                                        value={this.props.res.textContent}
+                                        onChange={v => this.props.handleChange('textContent', v)}
                                         className={classes.contentField}
                                         margin="normal"
                                     />
@@ -231,10 +289,9 @@ class CreateAndEditContent extends Component {
                                     <FormControl className={classes.formControl}>
                                         <InputLabel htmlFor="age-helper">请选择收费形式</InputLabel>
                                         <Select
-                                            value={this.state.age}
-                                            onChange={v => this.handleChange('saleType', v)}
-                                            input={<Input name="age" id="age-helper" />}
-                                            value={0}
+                                            value={1}
+                                            onChange={v => this.props.handleChange('saleType', v)}
+
                                         >
                                             <MenuItem value={0}>
                                                 <em>免费</em>
@@ -246,8 +303,10 @@ class CreateAndEditContent extends Component {
                                     </FormControl>
                                     <TextField
                                         id="price"
-                                        label="请输入图文价格"
-                                        onChange={v => this.handleChange('price', v)}
+                                        disabled={!this.props.res.saleType}
+                                        type="number"
+                                        value={this.props.res.price}
+                                        onChange={v => this.props.handleChange('price', v)}
                                         className={classes.resPrice}
                                         margin="normal"
                                     />
@@ -257,8 +316,8 @@ class CreateAndEditContent extends Component {
                                     <TextField
                                         id="datetime-local"
                                         type="datetime-local"
-                                        defaultValue="2017-05-24T10:30"
-                                        onChange={v => this.handleChange('saleTime', v)}
+                                        value={this.props.res.saleTime}
+                                        onChange={v => this.props.handleChange('saleTime', v)}
                                         className={classes.timeField}
                                         InputLabelProps={{
                                             shrink: true,
@@ -266,8 +325,8 @@ class CreateAndEditContent extends Component {
                                     />
                                 </div>
                                 <div className={classes.divideLine}></div>
-                                <Button variant="raised" size="large" color="primary" className={classes.button}>
-                                    创建
+                                <Button onClick={this.ceRes} variant="raised" size="large" color="primary" className={classes.button}>
+                                    {this.state.isEdit ? '保存' : '创建'}
                                 </Button>
                             </div>
                         </div>

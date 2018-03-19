@@ -1,6 +1,8 @@
 const initState = {
     firstPart: "",
-    secondPart: ""
+    secondPart: "",
+    resWords: "",
+    type: 0
 }
 
 const CHANGE_PART = 'CHANGE_PART'
@@ -9,7 +11,23 @@ const CHANGE_PART = 'CHANGE_PART'
 export function SideBar(state = initState, action) {
     switch (action.type) {
         case CHANGE_PART:
-            return { firstPart: action.firstPart, secondPart: action.secondPart }
+            switch (action.secondPart) {
+                case 'text':
+                    state.resWords = '图文'
+                    state.type = 1
+                    break
+                case 'audio':
+                    state.resWords = '音频'
+                    state.type = 2
+                    break
+                case 'video':
+                    state.resWords = '视频'
+                    state.type = 3
+                    break
+                default:
+                    break
+            }
+            return { ...state, firstPart: action.firstPart, secondPart: action.secondPart, }
         default:
             return state
     }
@@ -17,7 +35,6 @@ export function SideBar(state = initState, action) {
 
 // 改变侧边栏模块状态
 export function changePart(firstPart, secondPart) {
-    console.log(firstPart, secondPart)
     return dispatch => {
         dispatch({
             type: 'CHANGE_PART',

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Route,
+    Route
 } from 'react-router-dom'
+
 import { connect } from 'react-redux'
 
 import { withStyles } from 'material-ui/styles';
@@ -16,8 +17,9 @@ import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui-icons/Menu';
 import SidebarData from './SidebarData';
 
+import AuthRoute from './AuthRoute/AuthRoute'
 import CmsIndex from './index/CmsIndex'
-import CmsText from './content/text'
+import CmsResList from './content/resList'
 import CreateAndEditContent from './content/CreateAndEditContent'
 
 
@@ -151,9 +153,15 @@ class ResponsiveDrawer extends React.Component {
                 <main className={classes.content}>
                     <div className={classes.toolbar} />
                     <div style={{ margin: '0 16px', overflow: 'initial' }}>
+                        <AuthRoute></AuthRoute>
+                        <Route path="/cms/" exact component={CmsIndex} />
                         <Route path="/cms/index" exact component={CmsIndex} />
-                        <Route path="/cms/content/text" exact component={CmsText} />
-                        <Route path="/cms/content/text/create" exact component={CreateAndEditContent} />
+                        <Route path="/cms/content/text" exact component={CmsResList} />
+                        <Route path="/cms/content/text/:type" exact component={CreateAndEditContent} />
+                        <Route path="/cms/content/audio" exact component={CmsResList} />
+                        <Route path="/cms/content/audio/:type" exact component={CreateAndEditContent} />
+                        <Route path="/cms/content/video" exact component={CmsResList} />
+                        <Route path="/cms/content/video/:type" exact component={CreateAndEditContent} />
                     </div>
 
                 </main>

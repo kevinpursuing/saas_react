@@ -87,7 +87,6 @@ class SidebarDate extends React.Component {
     };
 
     componentDidMount = () => {
-        console.log(this.props)
         let paramsArray = this.props.location.split("/")
         let firstArray = this.state.firstPartFlag
         firstArray[paramsArray[2]] = !firstArray[paramsArray[2]]
@@ -133,7 +132,10 @@ class SidebarDate extends React.Component {
                     subheader={<ListSubheader component="div">SaaS后台管理系统</ListSubheader>}
                 >
                     <Link to="/cms/index">
-                        <MenuItem className={classes.menuItem} button>
+                        <MenuItem
+                            selected={SideBar.firstPart === 'index'}
+                            onClick={event => this.props.changePart('index', '')}
+                        >
                             <ListItemIcon>
                                 <SendIcon />
                             </ListItemIcon>
