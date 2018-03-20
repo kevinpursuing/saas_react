@@ -1,7 +1,7 @@
-// import OSS from 'ali-oss'
 import axios from 'axios'
 
-var OSS = require('ali-oss');
+var OSS = require('ali-oss/dist/aliyun-oss-sdk.js')
+
 
 const UPLOAD_SUCCESS = 'UPLOAD_SUCCESS'
 const UPLOAD_FAILED = 'UPLOAD_FAILED'

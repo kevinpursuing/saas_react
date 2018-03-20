@@ -138,6 +138,8 @@ class CreateAndEditContent extends Component {
     componentDidMount = () => {
         if (this.props.match.params.type !== 'create') {
             this.setState({ isEdit: true })
+            console.log(this.props.match.params.type)
+            console.log(this.props.SideBar.type)
             this.props.getResInfo(this.props.match.params.type, this.props.SideBar.type)
         }
     }
@@ -325,7 +327,7 @@ class CreateAndEditContent extends Component {
                                     />
                                 </div>
                                 <div className={classes.divideLine}></div>
-                                <Button onClick={this.ceRes} variant="raised" size="large" color="primary" className={classes.button}>
+                                <Button onClick={this.createRes} variant="raised" size="large" color="primary" className={classes.button}>
                                     {this.state.isEdit ? '保存' : '创建'}
                                 </Button>
                             </div>

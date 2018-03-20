@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { timeConvert, getNowFormatDate } from '../utils/utils'
 
-var OSS = require('ali-oss');
+var OSS = require('ali-oss/dist/aliyun-oss-sdk.js')
 
 const CREATE_RES = 'CREATE_RES'
 const EDIT_RES = 'EDIT_RES'
