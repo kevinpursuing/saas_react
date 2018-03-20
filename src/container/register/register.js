@@ -62,7 +62,7 @@ class Login extends Component {
     register = () => {
         let { phone, pwd } = this.state
         if (this.state.allowRegister === true) {
-            axios.post('/api/app/login', { phone: phone, pwd: pwd })
+            axios.post('/api/app/register', { phone: phone, pwd: pwd })
                 .then(res => {
                     if (res.status === 200 && res.data.code === 0) {
                         this.setState({ alertBoxOpen: true, registerSuccess: true })
