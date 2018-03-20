@@ -55,7 +55,7 @@ class Login extends Component {
         let { phone, pwd } = this.state
         console.log(phone, pwd)
         if (this.state.pwdTips === '' && this.state.phoneTips === '') {
-            axios.post('/app/login', { phone: phone, pwd: pwd })
+            axios.post('/api/app/login', { phone: phone, pwd: pwd })
                 .then(res => {
                     if (res.status === 200 && res.data.code === 0) {
                         this.props.history.push('/cms')

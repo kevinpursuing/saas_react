@@ -81,7 +81,7 @@ export function ossUpload(file, type) {  //type:1,图片 2,音频 3,视频
     var storeAs = storeFile + "/" + suffix;  //命名空间
     console.log(file.name + ' => ' + storeAs);
     return (dispatch) => {
-        axios.get('/sts')
+        axios.get('/api/sts')
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
                     ret = res.data.data
@@ -114,7 +114,7 @@ export function ossUpload(file, type) {  //type:1,图片 2,音频 3,视频
 
 export function getOssList() {
     let ret
-    axios.get('/sts')
+    axios.get('/api/sts')
         .then(res => {
             if (res.status === 200 && res.data.code === 0) {
                 ret = res.data.data

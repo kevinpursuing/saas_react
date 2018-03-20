@@ -92,7 +92,7 @@ export function ossUpload(file, type) {  //type:1,图片 2,音频 3,视频
     var storeAs = storeFile + "/" + suffix;  //命名空间
     console.log(file.name + ' => ' + storeAs);
     return (dispatch) => {
-        axios.get('/sts')
+        axios.get('/api/sts')
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
                     ret = res.data.data
@@ -141,7 +141,7 @@ export function ossUpload(file, type) {  //type:1,图片 2,音频 3,视频
 export function ceRes(data, type, history, secondPart) {
     let { resList, resDetail, ...params } = data
     return (dispatch) => {
-        axios.post('/cms/createRes', { type: type, ...params })
+        axios.post('/api/cms/createRes', { type: type, ...params })
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
                     dispatch(emptyRes())
@@ -154,7 +154,7 @@ export function ceRes(data, type, history, secondPart) {
 
 export function getResInfo(resId, type) {
     return (dispatch) => {
-        axios.get("/cms/getResInfo?id=" + resId)
+        axios.get("/api/cms/getResInfo?id=" + resId)
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
                     console.log(res.data.data)
@@ -167,7 +167,7 @@ export function getResInfo(resId, type) {
 
 export function getResList(type) {
     return (dispatch) => {
-        axios.get('/cms/getResList?type=' + type)
+        axios.get('/api/cms/getResList?type=' + type)
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
                     dispatch(resList(res.data.data))

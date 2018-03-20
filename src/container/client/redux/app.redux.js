@@ -65,7 +65,7 @@ function resource(data) {
 
 export function getResList(appId) {
     return (dispatch) => {
-        axios.get('/client/getResList?appId=' + appId)
+        axios.get('/api/client/getResList?appId=' + appId)
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
                     dispatch(resList(res.data.data))
@@ -76,7 +76,7 @@ export function getResList(appId) {
 
 export function getRes(appId, resId) {
     return (dispatch) => {
-        axios.get('/client/getRes?appId=' + appId + '&&id=' + resId)
+        axios.get('/api/client/getRes?appId=' + appId + '&&id=' + resId)
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
                     dispatch(resource(res.data.data))

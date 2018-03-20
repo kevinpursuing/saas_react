@@ -17,7 +17,7 @@ class AuthRoute extends React.Component {
         //     return null
         // }
         //  获取用户信息
-        axios.get('/app/info')
+        axios.get('/api/app/info')
             .then(res => {
                 if (res.status === 200) {
                     if (res.data.code === 0) {
